@@ -1,5 +1,5 @@
 # GameBoyEmu
-Gameboy emulator written in c. Can only run Tetris and Dr Mario due to lack of bank switching and non cycle-accurate emulation. Graphics done in sdl. Probably won't be worked on any further...
+Gameboy emulator written in c. Can only run Tetris and Dr Mario due to lack of bank switching and non cycle-accurate emulation. Graphics done in sdl.
 
 # Usage
 main.exe /path/to/romfile
