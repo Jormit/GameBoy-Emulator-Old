@@ -55,79 +55,79 @@ uint8_t JoypadState = 0xFF;
 
 /*
 Memory MAP.
-$FFFF 	Interrupt Enable Flag
-$FF80-$FFFE 	Zero Page - 127 bytes
-$FF00-$FF7F 	Hardware I/O Registers
-$FEA0-$FEFF 	Unusable Memory
-$FE00-$FE9F 	OAM - Object Attribute Memory
-$E000-$FDFF 	Echo RAM - Reserved, Do Not Use
-$D000-$DFFF 	Internal RAM - Bank 1-7 (switchable - CGB only)
-$C000-$CFFF 	Internal RAM - Bank 0 (fixed)
-$A000-$BFFF 	Cartridge RAM (If Available)
-$9C00-$9FFF 	BG Map Data 2
-$9800-$9BFF 	BG Map Data 1
-$8000-$97FF 	TILE RAM (Graphics)
-$4000-$7FFF 	Cartridge ROM - Switchable Banks 1-xx
-$0150-$3FFF 	Cartridge ROM - Bank 0 (fixed)
-$0100-$014F 	Cartridge Header Area
-$0000-$00FF 	Restart and Interrupt Vectors
+$FFFF     Interrupt Enable Flag
+$FF80-$FFFE     Zero Page - 127 bytes
+$FF00-$FF7F     Hardware I/O Registers
+$FEA0-$FEFF     Unusable Memory
+$FE00-$FE9F     OAM - Object Attribute Memory
+$E000-$FDFF     Echo RAM - Reserved, Do Not Use
+$D000-$DFFF     Internal RAM - Bank 1-7 (switchable - CGB only)
+$C000-$CFFF     Internal RAM - Bank 0 (fixed)
+$A000-$BFFF     Cartridge RAM (If Available)
+$9C00-$9FFF     BG Map Data 2
+$9800-$9BFF     BG Map Data 1
+$8000-$97FF     TILE RAM (Graphics)
+$4000-$7FFF     Cartridge ROM - Switchable Banks 1-xx
+$0150-$3FFF     Cartridge ROM - Bank 0 (fixed)
+$0100-$014F     Cartridge Header Area
+$0000-$00FF     Restart and Interrupt Vectors
 http://gameboy.mongenel.com/dmg/asmmemmap.html <-- Good website.
 */
 
 //Creating Registers.
 
 struct registers {
-	//Registers can be access individually or as a union. eg. |a| is 8bit, |af| is 16bit.
+    //Registers can be access individually or as a union. eg. |a| is 8bit, |af| is 16bit.
 
     struct {
-		union {
-			struct {
-				uint8_t f; //Flag Register. [z,n,h,c,0,0,0,0]
-				uint8_t a;
-			};
-			uint16_t af;
-		};
-	};
-	
-	struct {
-		union {
-			struct {
-				uint8_t c;
-				uint8_t b;
-			};
-			uint16_t bc;
-		};
-	};
-	
-	struct {
-		union {
-			struct {
-				uint8_t e;
-				uint8_t d;
-			};
-			uint16_t de;
-		};
-	};
-	
-	struct {
-		union {
-			struct {
-				uint8_t l;
-				uint8_t h;
-			};
-			uint16_t hl;
-		};
-	};
-	
-	uint16_t sp; //Stack pointer.
-	uint16_t pc; //Program counter.
+        union {
+            struct {
+                uint8_t f; //Flag Register. [z,n,h,c,0,0,0,0]
+                uint8_t a;
+            };
+            uint16_t af;
+        };
+    };
+    
+    struct {
+        union {
+            struct {
+                uint8_t c;
+                uint8_t b;
+            };
+            uint16_t bc;
+        };
+    };
+    
+    struct {
+        union {
+            struct {
+                uint8_t e;
+                uint8_t d;
+            };
+            uint16_t de;
+        };
+    };
+    
+    struct {
+        union {
+            struct {
+                uint8_t l;
+                uint8_t h;
+            };
+            uint16_t hl;
+        };
+    };
+    
+    uint16_t sp; //Stack pointer.
+    uint16_t pc; //Program counter.
 }registers;
 
 //Struct for instruction lookup.
 struct instruction {
     char name[15]; // Name of Instruction.
-		int length; // Number of operands instructions takes.
-		void (* fcnPtr)(); //Pointer to function that executes instruction.
+        int length; // Number of operands instructions takes.
+        void (* fcnPtr)(); //Pointer to function that executes instruction.
 };
 
 //Struct for storing pixel colors.
@@ -772,33 +772,33 @@ const struct instruction CB_instructions[]={
 
 //Array storing the cycle length of each instruction / 2;
 const uint8_t Cycles[256] = {
-	4, 6, 4, 4, 2, 2, 4, 4, 10, 4, 4, 4, 2, 2, 4, 4, // 0x0_
-	2, 6, 4, 4, 2, 2, 4, 4,  4, 4, 4, 4, 2, 2, 4, 4, // 0x1_
-	0, 6, 4, 4, 2, 2, 4, 2,  0, 4, 4, 4, 2, 2, 4, 2, // 0x2_
-	4, 6, 4, 4, 6, 6, 6, 2,  0, 4, 4, 4, 2, 2, 4, 2, // 0x3_
-	2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x4_
-	2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x5_
-	2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x6_
-	4, 4, 4, 4, 4, 4, 2, 4,  2, 2, 2, 2, 2, 2, 4, 2, // 0x7_
-	2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x8_
-	2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x9_
-	2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0xa_
-	2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0xb_
-	0, 6, 0, 6, 0, 8, 4, 8,  0, 2, 0, 0, 0, 6, 4, 8, // 0xc_
-	0, 6, 0, 0, 0, 8, 4, 8,  0, 8, 0, 0, 0, 0, 4, 8, // 0xd_
-	6, 6, 4, 0, 0, 8, 4, 8,  8, 2, 8, 0, 0, 0, 4, 8, // 0xe_
-	6, 6, 4, 2, 0, 8, 4, 8,  6, 4, 8, 2, 0, 0, 4, 8  // 0xf_
+    4, 6, 4, 4, 2, 2, 4, 4, 10, 4, 4, 4, 2, 2, 4, 4, // 0x0_
+    2, 6, 4, 4, 2, 2, 4, 4,  4, 4, 4, 4, 2, 2, 4, 4, // 0x1_
+    0, 6, 4, 4, 2, 2, 4, 2,  0, 4, 4, 4, 2, 2, 4, 2, // 0x2_
+    4, 6, 4, 4, 6, 6, 6, 2,  0, 4, 4, 4, 2, 2, 4, 2, // 0x3_
+    2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x4_
+    2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x5_
+    2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x6_
+    4, 4, 4, 4, 4, 4, 2, 4,  2, 2, 2, 2, 2, 2, 4, 2, // 0x7_
+    2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x8_
+    2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0x9_
+    2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0xa_
+    2, 2, 2, 2, 2, 2, 4, 2,  2, 2, 2, 2, 2, 2, 4, 2, // 0xb_
+    0, 6, 0, 6, 0, 8, 4, 8,  0, 2, 0, 0, 0, 6, 4, 8, // 0xc_
+    0, 6, 0, 0, 0, 8, 4, 8,  0, 8, 0, 0, 0, 0, 4, 8, // 0xd_
+    6, 6, 4, 0, 0, 8, 4, 8,  8, 2, 8, 0, 0, 0, 4, 8, // 0xe_
+    6, 6, 4, 2, 0, 8, 4, 8,  6, 4, 8, 2, 0, 0, 4, 8  // 0xf_
 };
 
 int Stop_Flag = 0;
 
 //Main
-int main(int argc, char **argv){	
+int main(int argc, char **argv){    
 
-	::argc = argc; //1337 hacking.
+    ::argc = argc; //1337 hacking.
     ::argv = argv;
 
-	Read_Rom(); //Doesn't Support Banking yet.
+    Read_Rom(); //Doesn't Support Banking yet.
     //Also bootrom is added to rom..
     Load_Bootrom();
 
@@ -807,9 +807,9 @@ int main(int argc, char **argv){
     Initialize_SDL(); //Start sdl.
     registers.pc = 0;
     
-	
-	//Main loop.
-	while (1){        
+    
+    //Main loop.
+    while (1){        
         cycle_count = 0; //Set cycle count to 0 at beginning of frame.
 
               
@@ -956,41 +956,41 @@ void Set_LCD_Status(){
 
 void Handle_Input(){
     if( event.type == SDL_KEYDOWN ) {
-		int key = -1 ;        
-		switch( event.key.keysym.sym ) {
-			case SDLK_TAB:      key = 4;    break; 
-			case SDLK_LCTRL:    key = 5;    break;
-			case SDLK_RETURN:   key = 7;    break;
-			case SDLK_BACKSLASH:key = 6;    break;
-			case SDLK_RIGHT:    key = 0;    break;
-			case SDLK_LEFT:     key = 1;    break;
-			case SDLK_UP:       key = 2;    break;
-			case SDLK_DOWN:     key = 3;    break;            
+        int key = -1 ;        
+        switch( event.key.keysym.sym ) {
+            case SDLK_TAB:      key = 4;    break; 
+            case SDLK_LCTRL:    key = 5;    break;
+            case SDLK_RETURN:   key = 7;    break;
+            case SDLK_BACKSLASH:key = 6;    break;
+            case SDLK_RIGHT:    key = 0;    break;
+            case SDLK_LEFT:     key = 1;    break;
+            case SDLK_UP:       key = 2;    break;
+            case SDLK_DOWN:     key = 3;    break;            
             default:            key = -1;   break;
-		}
+        }
         
-		if ( key != -1 ) {
-			KeyPress(key) ;
-		}
-	} 
+        if ( key != -1 ) {
+            KeyPress(key) ;
+        }
+    } 
     else if( event.type == SDL_KEYUP ) {
-		int key = -1 ;
+        int key = -1 ;
         
-		switch( event.key.keysym.sym ) {
-			case SDLK_TAB:      key = 4;    break;
-			case SDLK_LCTRL:    key = 5;    break;
-			case SDLK_RETURN:   key = 7;    break;
-			case SDLK_BACKSLASH:key = 6;    break;
-			case SDLK_RIGHT:    key = 0;    break;
-			case SDLK_LEFT:     key = 1;    break;
-			case SDLK_UP:       key = 2;    break;
-			case SDLK_DOWN:     key = 3;    break;
+        switch( event.key.keysym.sym ) {
+            case SDLK_TAB:      key = 4;    break;
+            case SDLK_LCTRL:    key = 5;    break;
+            case SDLK_RETURN:   key = 7;    break;
+            case SDLK_BACKSLASH:key = 6;    break;
+            case SDLK_RIGHT:    key = 0;    break;
+            case SDLK_LEFT:     key = 1;    break;
+            case SDLK_UP:       key = 2;    break;
+            case SDLK_DOWN:     key = 3;    break;
             default:            key = -1;   break;
-		}
+        }
         
-		if ( key != -1 ) {
-			KeyRelease(key);
-		}
+        if ( key != -1 ) {
+            KeyRelease(key);
+        }
     }
 }
 
@@ -1056,39 +1056,39 @@ void UpdateTimers(){
     
     uint8_t timerAtts = memory[0xFF07];
 
-	DividerVariable += Last_cycles ;
+    DividerVariable += Last_cycles ;
 
-	if (Test_bit(2, timerAtts))
-	{
-		TimerVariable += Last_cycles ;
+    if (Test_bit(2, timerAtts))
+    {
+        TimerVariable += Last_cycles ;
 
-		// time to increment the timer
-		if (TimerVariable >= CurrentClockSpeed)
-		{
-			TimerVariable = 0 ;
-			bool overflow = false ;
-			if (memory[0xFF05] == 0xFF)
-			{
-				overflow = true ;
-			}
-			memory[0xFF05]++ ;
+        // time to increment the timer
+        if (TimerVariable >= CurrentClockSpeed)
+        {
+            TimerVariable = 0 ;
+            bool overflow = false ;
+            if (memory[0xFF05] == 0xFF)
+            {
+                overflow = true ;
+            }
+            memory[0xFF05]++ ;
 
-			if (overflow)
-			{
-				memory[0xFF05] = memory[0xFF06] ;
+            if (overflow)
+            {
+                memory[0xFF05] = memory[0xFF06] ;
 
-				// request the interupt
-				Set_Interupt(2) ;
-			}
-		}
-	}
+                // request the interupt
+                Set_Interupt(2) ;
+            }
+        }
+    }
 
-	// do divider register
-	if (DividerVariable >= 256)
-	{
-		DividerVariable = 0;
-		memory[0xFF04]++ ;
-	}
+    // do divider register
+    if (DividerVariable >= 256)
+    {
+        DividerVariable = 0;
+        memory[0xFF04]++ ;
+    }
 
 }
 
@@ -1152,64 +1152,64 @@ void Setup_Color_Pallete(){
 
 //Loads Rom into Memory.
 void Read_Rom(){
-	if (argc != 2){
-			printf("Usage: ./main romfile/n");			
-			exit(1);
-	}   
+    if (argc != 2){
+            printf("Usage: ./main romfile/n");            
+            exit(1);
+    }   
     
     //Loads rom file into memory starting at adress 0x100h.
-	FILE* rom = fopen(argv[1], "rb");
-	if (rom == NULL) {
-		printf( "File not found" );
-	}
-	
-	//Find out how long the rom file is.
-	fseek(rom, 0, SEEK_END);
-	rom_size = ftell(rom);
-	rewind(rom);	
-	printf("Rom size is %d bytes. \n", rom_size);
-	
-	//Create a buffer to store rom. 
-	char* rom_buffer = (char*)malloc(rom_size * sizeof(char));
-	if (rom_buffer == NULL) {
-		cerr << "Could not allocate memory for ROM" << endl;
-	}
-	//Read File into buffer
-	size_t result = fread(rom_buffer, sizeof(char), (size_t)rom_size, rom);
-	
-	//Copy buffer into memory.
-	
+    FILE* rom = fopen(argv[1], "rb");
+    if (rom == NULL) {
+        printf( "File not found" );
+    }
+    
+    //Find out how long the rom file is.
+    fseek(rom, 0, SEEK_END);
+    rom_size = ftell(rom);
+    rewind(rom);    
+    printf("Rom size is %d bytes. \n", rom_size);
+    
+    //Create a buffer to store rom. 
+    char* rom_buffer = (char*)malloc(rom_size * sizeof(char));
+    if (rom_buffer == NULL) {
+        cerr << "Could not allocate memory for ROM" << endl;
+    }
+    //Read File into buffer
+    size_t result = fread(rom_buffer, sizeof(char), (size_t)rom_size, rom);
+    
+    //Copy buffer into memory.
+    
     for (int i = 0; i < rom_size; ++i) {
       memory[i] = (uint8_t)rom_buffer[i];
     }    
     
-	fclose(rom);
-	
+    fclose(rom);
+    
 }
 
 void Load_Bootrom(){
     //Loads rom file into memory starting at adress 0x100h.
-	FILE* rom = fopen("roms/DMG_ROM.bin", "rb");
-	if (rom == NULL) {
-		printf( "File not found" );
-	}
-	
-	//Find out how long the rom file is.
-	fseek(rom, 0, SEEK_END);
-	rom_size = ftell(rom);
-	rewind(rom);	
-	printf("Rom size is %d bytes. \n", rom_size);
-	
-	//Create a buffer to store rom. 
-	char* rom_buffer = (char*)malloc(rom_size * sizeof(char));
-	if (rom_buffer == NULL) {
-		cerr << "Could not allocate memory for ROM" << endl;
-	}
-	//Read File into buffer
-	size_t result = fread(rom_buffer, sizeof(char), (size_t)rom_size, rom);
-	
-	//Copy buffer into memory.
-	
+    FILE* rom = fopen("roms/DMG_ROM.bin", "rb");
+    if (rom == NULL) {
+        printf( "File not found" );
+    }
+    
+    //Find out how long the rom file is.
+    fseek(rom, 0, SEEK_END);
+    rom_size = ftell(rom);
+    rewind(rom);    
+    printf("Rom size is %d bytes. \n", rom_size);
+    
+    //Create a buffer to store rom. 
+    char* rom_buffer = (char*)malloc(rom_size * sizeof(char));
+    if (rom_buffer == NULL) {
+        cerr << "Could not allocate memory for ROM" << endl;
+    }
+    //Read File into buffer
+    size_t result = fread(rom_buffer, sizeof(char), (size_t)rom_size, rom);
+    
+    //Copy buffer into memory.
+    
     for (int i = 0; i < rom_size; ++i) {
         temp_for_boot[i] = memory[i];
         memory[i] = (uint8_t)rom_buffer[i];
@@ -1217,7 +1217,7 @@ void Load_Bootrom(){
 
     
     
-	fclose(rom);
+    fclose(rom);
 }
 
 void Restore_Rom(){
@@ -1253,21 +1253,21 @@ void Registers_Info(){
 
 //Emulates a cpu cyle.
 void Cpu_Cycle(){
-	
-	uint8_t opcode = memory[registers.pc];    
+    
+    uint8_t opcode = memory[registers.pc];    
 
     if( instructions[opcode].length == 0){
-		registers.pc+=1;
+        registers.pc+=1;
         //printf("0x%x: %02x %s \n",registers.pc,opcode,instructions[opcode].name);
-		((void (*)(void))instructions[opcode].fcnPtr)();    
-	}
+        ((void (*)(void))instructions[opcode].fcnPtr)();    
+    }
 
-	else if( instructions[opcode].length == 1){ //No operand.
-		//printf("0x%x: %02x %s \n",registers.pc,opcode,instructions[opcode].name); //Print Info.
-		registers.pc+=1;
+    else if( instructions[opcode].length == 1){ //No operand.
+        //printf("0x%x: %02x %s \n",registers.pc,opcode,instructions[opcode].name); //Print Info.
+        registers.pc+=1;
         ((void (*)(void))instructions[opcode].fcnPtr)(); //Run opcode function.    
-	}
-	else if( instructions[opcode].length == 2){ //8 bit operand.		
+    }
+    else if( instructions[opcode].length == 2){ //8 bit operand.        
        
         Operand8 = memory[registers.pc + 1];
         registers.pc+=2;
@@ -1276,16 +1276,16 @@ void Cpu_Cycle(){
             ((void (*)(void))CB_instructions[Operand8].fcnPtr)();            
         }
         else{
-            //printf("0x%x: %02x %x %s \n",registers.pc,opcode, Operand8 ,instructions[opcode].name); //Print Info.		
+            //printf("0x%x: %02x %x %s \n",registers.pc,opcode, Operand8 ,instructions[opcode].name); //Print Info.        
             ((void (*)(void))instructions[opcode].fcnPtr)(); //Run opcode function.            
         }       
-	}
-	else if( instructions[opcode].length == 3){ //16 bit operand.
+    }
+    else if( instructions[opcode].length == 3){ //16 bit operand.
         Operand16 = (memory[registers.pc + 2] << 8) + memory[registers.pc + 1];//Accounting for endianess.
-        registers.pc+=3; 		
-		//printf("0x%x: %02x %04x %s \n",registers.pc,opcode, Operand16,instructions[opcode].name); //Print Info.
-        ((void (*)(void))instructions[opcode].fcnPtr)(); //Run opcode function.    	
-	}
+        registers.pc+=3;         
+        //printf("0x%x: %02x %04x %s \n",registers.pc,opcode, Operand16,instructions[opcode].name); //Print Info.
+        ((void (*)(void))instructions[opcode].fcnPtr)(); //Run opcode function.        
+    }
 
     //Increment the cycle counter.
     cycle_count += 2*Cycles[opcode];
@@ -1294,25 +1294,25 @@ void Cpu_Cycle(){
 
 //Handles Interupts.
 void Interupts(){
-	// are interrupts enabled
-	if (IME)
-	{		
-		uint8_t requestFlag = memory[0xFF0F];
-		if (requestFlag > 0)
-		{			
-			for (int bit = 0; bit < 8; bit++)
-			{
-				if (requestFlag & (0x1 << bit))
-				{					
-					BYTE enabledReg = memory[0xFFFF];
-					if (enabledReg & (0x1 << bit))                        
-					{						
-						Do_Interupt(bit) ;
-					}
-				}
-			}
-		}
-	}
+    // are interrupts enabled
+    if (IME)
+    {        
+        uint8_t requestFlag = memory[0xFF0F];
+        if (requestFlag > 0)
+        {            
+            for (int bit = 0; bit < 8; bit++)
+            {
+                if (requestFlag & (0x1 << bit))
+                {                    
+                    BYTE enabledReg = memory[0xFFFF];
+                    if (enabledReg & (0x1 << bit))                        
+                    {                        
+                        Do_Interupt(bit) ;
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -1827,7 +1827,7 @@ void Xor(uint8_t a){
     
     registers.a ^= a;
     
-	if(registers.a){Clear_Z_Flag();} //Set Zero Flag.
+    if(registers.a){Clear_Z_Flag();} //Set Zero Flag.
     else{Set_Z_Flag();}
 
     Clear_N_Flag(); //Clear Other Flags.
@@ -2049,24 +2049,24 @@ void LD_H_d8() //    0x26
 void DAA() //    0x27
 {
     {
-		unsigned short s = registers.a;
-		
-		if(Test_bit(6, registers.f)) {
-			if(Test_bit(5, registers.f)) s = (s - 0x06)&0xFF;
-			if(Test_bit(4, registers.f)) s -= 0x60;
-		}
-		else {
-			if(Test_bit(5, registers.f) || (s & 0xF) > 9) s += 0x06;
-			if(Test_bit(4, registers.f) || s > 0x9F) s += 0x60;
-		}
-		
-		registers.a = s;
+        unsigned short s = registers.a;
+        
+        if(Test_bit(6, registers.f)) {
+            if(Test_bit(5, registers.f)) s = (s - 0x06)&0xFF;
+            if(Test_bit(4, registers.f)) s -= 0x60;
+        }
+        else {
+            if(Test_bit(5, registers.f) || (s & 0xF) > 9) s += 0x06;
+            if(Test_bit(4, registers.f) || s > 0x9F) s += 0x60;
+        }
+        
+        registers.a = s;
         Clear_H_Flag();
 
-		if(registers.a) Clear_Z_Flag();
-		else Set_Z_Flag();
-		
-		if(s >= 0x100) Set_C_Flag();
+        if(registers.a) Clear_Z_Flag();
+        else Set_Z_Flag();
+        
+        if(s >= 0x100) Set_C_Flag();
 }
 }
 void JR_Z_r8() //    0x28
