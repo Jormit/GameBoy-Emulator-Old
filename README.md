@@ -4,7 +4,7 @@ Gameboy emulator written in c purely for learning purposes. All instructions are
 ![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
 
 ## usage
-main.exe /path/to/romfile
+```main.exe /path/to/romfile```
 
 
 
