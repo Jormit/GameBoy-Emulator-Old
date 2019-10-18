@@ -14,7 +14,7 @@ Dead.
 ![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
 
 ## usage
-The emulator requires a rom and a bootrom. 
+The emulator requires a rom and a bootrom to work.
 ```main.exe /path/to/romfile```
 
 
