@@ -8,7 +8,7 @@ https://gbdev.gg8.se/wiki/articles/Main_Page <br/>
 http://www.devrs.com/gb/files/opcodes.html <br/>
 
 ## Project status.
-Dead.
+Dead. 💀
 
 ## Demos
 ![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
