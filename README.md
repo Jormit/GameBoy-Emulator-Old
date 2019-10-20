@@ -4,10 +4,10 @@ Gameboy emulator written in c. All instructions are implemented, however it can 
 Beware this is very rusty and unfinished and not meant for serious use. You will notice erratic comments and unused code blocks. 
 
 ## Rescources used.
-https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html <br/> 
-http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf <br/>
-https://gbdev.gg8.se/wiki/articles/Main_Page <br/>
-http://www.devrs.com/gb/files/opcodes.html <br/>
+- https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html <br/> 
+- http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf <br/>
+- https://gbdev.gg8.se/wiki/articles/Main_Page <br/>
+- http://www.devrs.com/gb/files/opcodes.html <br/>
 
 ## Project status.
 On hold atm until I get motivated to work more on it. 😩
@@ -24,7 +24,7 @@ On hold atm until I get motivated to work more on it. 😩
 ## Demos
 ![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
 
-## usage
+## Usage
 The emulator requires a rom and a bootrom to work.
 ```main.exe /path/to/romfile```
 
