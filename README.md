@@ -12,6 +12,14 @@ http://www.devrs.com/gb/files/opcodes.html <br/>
 ## Project status.
 On hold atm until I get motivated to work more on it.
 
+## TODO
+- Proper write sanitisation to avoid unaccessable memory addresses being written to.
+- Rom banking.
+- Windowing support.
+- Miscellaneous bug fixes.
+- Key binding editor.
+- No bootrom dependency.
+
 ## Demos
 ![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
 
