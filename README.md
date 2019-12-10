@@ -19,7 +19,7 @@ On hold atm until I get motivated to work more on it. 😩
 - Miscellaneous bug fixes.
 - Key binding editor.
 - No bootrom dependency.
-- Makefile.
+- Proper build tools.
 
 ## Demos
 ![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
