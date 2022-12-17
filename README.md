@@ -9,9 +9,6 @@ Gameboy emulator written in c. All instructions are implemented, however it can 
 - https://gbdev.gg8.se/wiki/articles/Main_Page <br/>
 - http://www.devrs.com/gb/files/opcodes.html <br/>
 
-## Project status 📅
-On hold atm until I get motivated to work more on it. 😩
-
 ## TODO ✔️
 - Proper write sanitisation to avoid unaccessable memory addresses being written to.
 - Rom banking.
