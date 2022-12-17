@@ -1,4 +1,4 @@
-## GameBoy-emulator
+## GameBoy Emulator 🕹️
 Gameboy emulator written in c. All instructions are implemented, however it can only run Tetris and Dr Mario due to lack of bank switching implementation and unknown cpu bugs. Performance is good, peaking at around 10% cpu usage with no visible lag. Instructions are executed using a function lookup table that is indexed by each opcode instead of a traditional case break approach. All i/o is handled by the SDL library using a bitmapped screen buffer.
 
  ⚠️  Beware this is very rusty and unfinished and not meant for serious use 
@@ -21,7 +21,7 @@ On hold atm until I get motivated to work more on it. 😩
 - No bootrom dependency.
 - Proper build tools.
 
-## Demos
+## Examples
 ![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
 
 ## Usage
