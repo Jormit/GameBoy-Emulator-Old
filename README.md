@@ -19,7 +19,7 @@ Gameboy emulator written in c. All instructions are implemented, however it can 
 - Proper build tools.
 
 ## Examples 👀
-![](Images/1.png)  |  ![](Images/2.png) | ![](Images/3.png)
+![](Images/1.png)       ![](Images/2.png)       ![](Images/3.png)
 
 ## Usage ⌨️
 The emulator requires a rom and a bootrom to work.
